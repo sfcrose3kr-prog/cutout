@@ -26,6 +26,7 @@ import {
   useUpdateDayEntry,
   useBulkCreateDayEntries,
 } from "@/hooks/use-day-entries";
+import { AuthContext } from "@/App";
 
 function toYmd(d: Date) {
   return format(d, "yyyy-MM-dd");
@@ -41,6 +42,7 @@ type ViewMode = "daily" | "monthly" | "range";
 
 export default function Home() {
   const { toast } = useToast();
+  const { isAdmin } = React.useContext(AuthContext);
 
   const [selectedDate, setSelectedDate] = React.useState<string>(toYmd(new Date()));
   const [selectedMonth, setSelectedMonth] = React.useState<Date>(new Date());
@@ -103,7 +105,7 @@ export default function Home() {
     return s.size;
   }, [items]);
 
-  const headerRight = (
+  const headerRight = isAdmin ? (
     <div className="flex gap-2">
       <Button
         data-testid="header-bulk-entry"
@@ -123,7 +125,7 @@ export default function Home() {
         새 입력
       </Button>
     </div>
-  );
+  ) : null;
 
   return (
     <Shell rightSlot={headerRight}>
@@ -203,25 +205,27 @@ export default function Home() {
                   </div>
                 </div>
               </div>
-              <div className="flex gap-2">
-                <Button
-                  onClick={() => setBulkOpen(true)}
-                  data-testid="bulk-entry-button"
-                  variant="secondary"
-                  className="rounded-xl"
-                >
-                  <ListPlus className="mr-2 h-4 w-4" />
-                  10개
-                </Button>
-                <Button
-                  onClick={() => setCreateOpen(true)}
-                  data-testid="new-entry-button"
-                  className="rounded-xl bg-gradient-to-r from-primary to-primary/80 text-primary-foreground shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/25 hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200"
-                >
-                  <Plus className="mr-2 h-4 w-4" />
-                  새 입력
-                </Button>
-              </div>
+              {isAdmin && (
+                <div className="flex gap-2">
+                  <Button
+                    onClick={() => setBulkOpen(true)}
+                    data-testid="bulk-entry-button"
+                    variant="secondary"
+                    className="rounded-xl"
+                  >
+                    <ListPlus className="mr-2 h-4 w-4" />
+                    10개
+                  </Button>
+                  <Button
+                    onClick={() => setCreateOpen(true)}
+                    data-testid="new-entry-button"
+                    className="rounded-xl bg-gradient-to-r from-primary to-primary/80 text-primary-foreground shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/25 hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200"
+                  >
+                    <Plus className="mr-2 h-4 w-4" />
+                    새 입력
+                  </Button>
+                </div>
+              )}
             </div>
 
             <Separator className="my-4 opacity-60" />

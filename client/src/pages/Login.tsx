@@ -15,20 +15,28 @@ export function useAuth() {
     return sessionStorage.getItem("isLoggedIn") === "true";
   });
 
-  const login = () => {
+  const [isAdmin, setIsAdmin] = React.useState(() => {
+    return sessionStorage.getItem("isAdmin") === "true";
+  });
+
+  const login = (asAdmin: boolean = false) => {
     sessionStorage.setItem("isLoggedIn", "true");
+    sessionStorage.setItem("isAdmin", asAdmin ? "true" : "false");
     setIsLoggedIn(true);
+    setIsAdmin(asAdmin);
   };
 
   const logout = () => {
     sessionStorage.removeItem("isLoggedIn");
+    sessionStorage.removeItem("isAdmin");
     setIsLoggedIn(false);
+    setIsAdmin(false);
   };
 
-  return { isLoggedIn, login, logout };
+  return { isLoggedIn, isAdmin, login, logout };
 }
 
-export default function Login({ onLogin }: { onLogin: () => void }) {
+export default function Login({ onLogin }: { onLogin: (isAdmin: boolean) => void }) {
   const { toast } = useToast();
   const [username, setUsername] = React.useState("");
   const [password, setPassword] = React.useState("");
@@ -37,7 +45,7 @@ export default function Login({ onLogin }: { onLogin: () => void }) {
     e.preventDefault();
     
     if (username === VALID_USERNAME && password === VALID_PASSWORD) {
-      onLogin();
+      onLogin(true);
     } else {
       toast({
         title: "로그인 실패",

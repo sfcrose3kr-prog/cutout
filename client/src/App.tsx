@@ -20,14 +20,22 @@ function Router() {
   );
 }
 
+export const AuthContext = React.createContext<{ isAdmin: boolean }>({ isAdmin: false });
+
 function App() {
   const [isLoggedIn, setIsLoggedIn] = React.useState(() => {
     return sessionStorage.getItem("isLoggedIn") === "true";
   });
 
-  const handleLogin = () => {
+  const [isAdmin, setIsAdmin] = React.useState(() => {
+    return sessionStorage.getItem("isAdmin") === "true";
+  });
+
+  const handleLogin = (admin: boolean) => {
     sessionStorage.setItem("isLoggedIn", "true");
+    sessionStorage.setItem("isAdmin", admin ? "true" : "false");
     setIsLoggedIn(true);
+    setIsAdmin(admin);
   };
 
   if (!isLoggedIn) {
@@ -44,8 +52,10 @@ function App() {
   return (
     <QueryClientProvider client={queryClient}>
       <TooltipProvider>
-        <Toaster />
-        <Router />
+        <AuthContext.Provider value={{ isAdmin }}>
+          <Toaster />
+          <Router />
+        </AuthContext.Provider>
       </TooltipProvider>
     </QueryClientProvider>
   );
