@@ -240,6 +240,7 @@ export default function Home() {
                     if (!d) return;
                     setSelectedDate(toYmd(d));
                   }}
+                  locale={ko}
                   className="rounded-2xl border border-border/70 bg-background/40 p-3"
                 />
                 <div className="mt-4 overflow-hidden rounded-2xl border border-border/70">
