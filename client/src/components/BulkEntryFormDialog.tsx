@@ -26,9 +26,9 @@ function createEmptyRow(date: string): BulkEntryRow {
     productName: "",
     thickness: "",
     winding: "",
-    workType: "",
-    emboss: "",
-    size: "",
+    workType: "PVC",
+    emboss: "민자",
+    size: "18",
     note: "",
   };
 }

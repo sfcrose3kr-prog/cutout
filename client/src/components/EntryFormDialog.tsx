@@ -29,9 +29,9 @@ function toDefaults(date: string, entry?: DayEntryResponse | null): DayEntryForm
     productName: entry?.productName ?? "",
     thickness: (entry?.thickness ?? 0) as any,
     winding: (entry?.winding ?? 0) as any,
-    workType: entry?.workType ?? "",
-    emboss: entry?.emboss ?? "",
-    size: (entry?.size ?? 0) as any,
+    workType: entry?.workType ?? "PVC",
+    emboss: entry?.emboss ?? "민자",
+    size: (entry?.size ?? 18) as any,
     note: entry?.note ?? "",
   };
 }
