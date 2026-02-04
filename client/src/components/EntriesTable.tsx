@@ -75,7 +75,7 @@ export default function EntriesTable({
                 <TableCell className="font-medium">{it.counterparty}</TableCell>
                 <TableCell>{it.productName}</TableCell>
                 <TableCell className="text-right tabular-nums">
-                  {Number(it.thickness).toFixed(2)}
+                  {parseFloat(Number(it.thickness).toFixed(2))}
                 </TableCell>
                 <TableCell className="text-right tabular-nums">{it.winding}</TableCell>
                 <TableCell>{it.workType}</TableCell>
