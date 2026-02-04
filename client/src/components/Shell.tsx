@@ -18,14 +18,6 @@ function Brand() {
       >
         <CalendarDays className="h-5 w-5 text-primary" />
       </div>
-      <div className="leading-tight">
-        <div className="text-[15px] font-semibold tracking-tight">
-          일자별 작업 입력
-        </div>
-        <div className="text-xs text-muted-foreground">
-          날짜 기반 생산/거래 입력 시스템
-        </div>
-      </div>
     </div>
   );
 }
