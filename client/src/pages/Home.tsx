@@ -1,13 +1,14 @@
 import * as React from "react";
 import { format } from "date-fns";
 import { ko } from "date-fns/locale";
-import { Calendar as CalendarIcon, Plus, RefreshCw, Search, SlidersHorizontal } from "lucide-react";
+import { Calendar as CalendarIcon, Plus, RefreshCw, Search, SlidersHorizontal, ListPlus } from "lucide-react";
 
 import Seo from "@/components/Seo";
 import Shell from "@/components/Shell";
 import StatPill from "@/components/StatPill";
 import EntriesTable from "@/components/EntriesTable";
 import EntryFormDialog, { type DayEntryFormValues } from "@/components/EntryFormDialog";
+import BulkEntryFormDialog, { type BulkEntryRow } from "@/components/BulkEntryFormDialog";
 import ConfirmDialog from "@/components/ConfirmDialog";
 
 import { Calendar } from "@/components/ui/calendar";
@@ -23,6 +24,7 @@ import {
   useDayEntries,
   useDeleteDayEntry,
   useUpdateDayEntry,
+  useBulkCreateDayEntries,
 } from "@/hooks/use-day-entries";
 
 function toYmd(d: Date) {
@@ -65,8 +67,10 @@ export default function Home() {
   const createMut = useCreateDayEntry();
   const updateMut = useUpdateDayEntry();
   const deleteMut = useDeleteDayEntry();
+  const bulkCreateMut = useBulkCreateDayEntries();
 
   const [createOpen, setCreateOpen] = React.useState(false);
+  const [bulkOpen, setBulkOpen] = React.useState(false);
   const [editOpen, setEditOpen] = React.useState(false);
   const [editing, setEditing] = React.useState<DayEntryResponse | null>(null);
 
@@ -86,14 +90,25 @@ export default function Home() {
   }, [items]);
 
   const headerRight = (
-    <Button
-      data-testid="header-new-entry"
-      onClick={() => setCreateOpen(true)}
-      className="rounded-xl bg-gradient-to-r from-primary to-primary/80 text-primary-foreground shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/25 hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200"
-    >
-      <Plus className="mr-2 h-4 w-4" />
-      새 입력
-    </Button>
+    <div className="flex gap-2">
+      <Button
+        data-testid="header-bulk-entry"
+        onClick={() => setBulkOpen(true)}
+        variant="secondary"
+        className="rounded-xl"
+      >
+        <ListPlus className="mr-2 h-4 w-4" />
+        10개 입력
+      </Button>
+      <Button
+        data-testid="header-new-entry"
+        onClick={() => setCreateOpen(true)}
+        className="rounded-xl bg-gradient-to-r from-primary to-primary/80 text-primary-foreground shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/25 hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200"
+      >
+        <Plus className="mr-2 h-4 w-4" />
+        새 입력
+      </Button>
+    </div>
   );
 
   return (
@@ -146,14 +161,25 @@ export default function Home() {
                   </div>
                 </div>
               </div>
-              <Button
-                onClick={() => setCreateOpen(true)}
-                data-testid="new-entry-button"
-                className="rounded-xl bg-gradient-to-r from-primary to-primary/80 text-primary-foreground shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/25 hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200"
-              >
-                <Plus className="mr-2 h-4 w-4" />
-                새 입력
-              </Button>
+              <div className="flex gap-2">
+                <Button
+                  onClick={() => setBulkOpen(true)}
+                  data-testid="bulk-entry-button"
+                  variant="secondary"
+                  className="rounded-xl"
+                >
+                  <ListPlus className="mr-2 h-4 w-4" />
+                  10개
+                </Button>
+                <Button
+                  onClick={() => setCreateOpen(true)}
+                  data-testid="new-entry-button"
+                  className="rounded-xl bg-gradient-to-r from-primary to-primary/80 text-primary-foreground shadow-lg shadow-primary/20 hover:shadow-xl hover:shadow-primary/25 hover:-translate-y-0.5 active:translate-y-0 transition-all duration-200"
+                >
+                  <Plus className="mr-2 h-4 w-4" />
+                  새 입력
+                </Button>
+              </div>
             </div>
 
             <Separator className="my-4 opacity-60" />
@@ -359,6 +385,40 @@ export default function Home() {
             });
           }
         }}
+      />
+
+      <BulkEntryFormDialog
+        open={bulkOpen}
+        onOpenChange={setBulkOpen}
+        selectedDate={selectedDate}
+        onSubmit={async (rows: BulkEntryRow[]) => {
+          try {
+            const entries = rows.map((r) => ({
+              date: r.date,
+              counterparty: r.counterparty,
+              productName: r.productName,
+              thickness: parseFloat(r.thickness),
+              winding: parseInt(r.winding, 10),
+              workType: r.workType,
+              emboss: r.emboss,
+              size: parseInt(r.size, 10),
+              note: r.note || null,
+            }));
+            const result = await bulkCreateMut.mutateAsync(entries);
+            toast({
+              title: "일괄 저장 완료",
+              description: `${result.inserted}건이 추가되었습니다.`,
+            });
+            setBulkOpen(false);
+          } catch (e) {
+            toast({
+              title: "저장 실패",
+              description: (e as Error).message,
+              variant: "destructive",
+            });
+          }
+        }}
+        isPending={bulkCreateMut.isPending}
       />
     </Shell>
   );

@@ -151,6 +151,36 @@ export function useDeleteDayEntry() {
   });
 }
 
+export function useBulkCreateDayEntries() {
+  const qc = useQueryClient();
+  return useMutation({
+    mutationFn: async (entries: DayEntryCreateInput[]) => {
+      const validated = api.dayEntries.bulkCreate.input.parse({ entries });
+      const res = await fetch(api.dayEntries.bulkCreate.path, {
+        method: api.dayEntries.bulkCreate.method,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(validated),
+        credentials: "include",
+      });
+
+      if (!res.ok) {
+        if (res.status === 400) {
+          const errJson = await res.json();
+          const parsed = parseWithLogging(api.dayEntries.bulkCreate.responses[400], errJson, "dayEntries.bulkCreate.400");
+          throw new Error(parsed.message);
+        }
+        throw new Error("Failed to bulk create day entries");
+      }
+
+      const json = await res.json();
+      return parseWithLogging(api.dayEntries.bulkCreate.responses[201], json, "dayEntries.bulkCreate.201");
+    },
+    onSuccess: () => {
+      qc.invalidateQueries({ queryKey: [api.dayEntries.list.path] });
+    },
+  });
+}
+
 export function useImportDayEntriesExcel() {
   const qc = useQueryClient();
   return useMutation({

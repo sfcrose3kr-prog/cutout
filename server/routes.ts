@@ -95,6 +95,22 @@ export async function registerRoutes(
     return res.status(204).send();
   });
 
+  app.post(api.dayEntries.bulkCreate.path, async (req, res) => {
+    try {
+      const body = api.dayEntries.bulkCreate.input.parse(req.body);
+      const inserted = await storage.bulkCreateDayEntries(body.entries);
+      return res.status(201).json({ inserted });
+    } catch (err) {
+      if (err instanceof z.ZodError) {
+        return res.status(400).json({
+          message: err.errors[0]?.message ?? "Validation error",
+          field: err.errors[0]?.path.join("."),
+        });
+      }
+      throw err;
+    }
+  });
+
   app.post(api.dayEntries.importExcel.path, async (req, res) => {
     try {
       const body = api.dayEntries.importExcel.input.parse(req.body ?? {});

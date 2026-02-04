@@ -69,6 +69,19 @@ export const api = {
         404: errorSchemas.notFound,
       },
     },
+    bulkCreate: {
+      method: "POST" as const,
+      path: "/api/day-entries/bulk",
+      input: z.object({
+        entries: z.array(insertDayEntrySchema),
+      }),
+      responses: {
+        201: z.object({
+          inserted: z.number(),
+        }),
+        400: errorSchemas.validation,
+      },
+    },
     importExcel: {
       method: "POST" as const,
       path: "/api/day-entries/import/excel",
