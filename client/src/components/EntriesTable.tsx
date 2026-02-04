@@ -51,6 +51,7 @@ export default function EntriesTable({
         <Table>
           <TableHeader>
             <TableRow className="bg-muted/40">
+              <TableHead className="min-w-[100px]">일자</TableHead>
               <TableHead className="min-w-[110px]">거래처</TableHead>
               <TableHead className="min-w-[120px]">품명</TableHead>
               <TableHead className="min-w-[80px] text-right">두께</TableHead>
@@ -70,6 +71,7 @@ export default function EntriesTable({
                 data-testid={`entry-row-${it.id}`}
                 className="transition-colors hover:bg-secondary/50"
               >
+                <TableCell className="tabular-nums">{it.date}</TableCell>
                 <TableCell className="font-medium">{it.counterparty}</TableCell>
                 <TableCell>{it.productName}</TableCell>
                 <TableCell className="text-right tabular-nums">
@@ -112,7 +114,7 @@ export default function EntriesTable({
 
             {items.length === 0 ? (
               <TableRow>
-                <TableCell colSpan={9} className="py-14 text-center">
+                <TableCell colSpan={10} className="py-14 text-center">
                   <div className="mx-auto flex max-w-md flex-col items-center gap-2">
                     <div className="text-base font-semibold tracking-tight">
                       아직 입력이 없어요
