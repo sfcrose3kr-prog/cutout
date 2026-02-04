@@ -153,7 +153,7 @@ export default function BulkEntryFormDialog({
 
             <ScrollArea className="flex-1 pr-2">
               <div className="space-y-2">
-                <div className="grid grid-cols-[40px_70px_90px_90px_60px_60px_70px_60px_60px_1fr_40px] gap-1 text-xs font-medium text-muted-foreground sticky top-0 bg-card/95 py-1 z-10">
+                <div className="grid grid-cols-[40px_70px_90px_90px_70px_70px_70px_60px_60px_80px_40px] gap-1 text-xs font-medium text-muted-foreground sticky top-0 bg-card/95 py-1 z-10">
                   <div>#</div>
                   <div>일자</div>
                   <div>거래처</div>
@@ -170,7 +170,7 @@ export default function BulkEntryFormDialog({
                 {rows.map((row, idx) => (
                   <div
                     key={idx}
-                    className="grid grid-cols-[40px_70px_90px_90px_60px_60px_70px_60px_60px_1fr_40px] gap-1 items-center"
+                    className="grid grid-cols-[40px_70px_90px_90px_70px_70px_70px_60px_60px_80px_40px] gap-1 items-center"
                     data-testid={`bulk-row-${idx}`}
                   >
                     <div className="text-xs text-muted-foreground text-center">{idx + 1}</div>
