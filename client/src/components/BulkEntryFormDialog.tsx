@@ -87,6 +87,21 @@ export default function BulkEntryFormDialog({
     setRows((prev) => prev.map((r) => ({ ...r, date: baseDate })));
   };
 
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    if (e.key === "Enter") {
+      e.preventDefault();
+      const form = e.currentTarget.form;
+      if (!form) return;
+      const inputs = Array.from(form.querySelectorAll("input:not([type=hidden])"));
+      const currentIndex = inputs.indexOf(e.currentTarget);
+      const nextInput = inputs[currentIndex + 1] as HTMLInputElement | undefined;
+      if (nextInput) {
+        nextInput.focus();
+        nextInput.select();
+      }
+    }
+  };
+
   const removeRow = (index: number) => {
     setRows((prev) => prev.filter((_, i) => i !== index));
   };
@@ -201,6 +216,7 @@ export default function BulkEntryFormDialog({
                         <Input
                           value={row.date}
                           onChange={(e) => updateRow(idx, "date", e.target.value)}
+                          onKeyDown={handleKeyDown}
                           placeholder="YY-MM-DD"
                           className="h-9 text-sm rounded-lg mt-1"
                           data-testid={`bulk-field-date-${idx}`}
@@ -211,6 +227,7 @@ export default function BulkEntryFormDialog({
                         <Input
                           value={row.counterparty}
                           onChange={(e) => updateRow(idx, "counterparty", e.target.value)}
+                          onKeyDown={handleKeyDown}
                           placeholder="거래처"
                           className="h-9 text-sm rounded-lg mt-1"
                           data-testid={`bulk-field-counterparty-${idx}`}
@@ -221,6 +238,7 @@ export default function BulkEntryFormDialog({
                         <Input
                           value={row.productName}
                           onChange={(e) => updateRow(idx, "productName", e.target.value)}
+                          onKeyDown={handleKeyDown}
                           placeholder="품명"
                           className="h-9 text-sm rounded-lg mt-1"
                           data-testid={`bulk-field-productName-${idx}`}
@@ -231,6 +249,7 @@ export default function BulkEntryFormDialog({
                         <Input
                           value={row.thickness}
                           onChange={(e) => updateRow(idx, "thickness", e.target.value)}
+                          onKeyDown={handleKeyDown}
                           placeholder="두께"
                           type="number"
                           step="0.01"
@@ -243,6 +262,7 @@ export default function BulkEntryFormDialog({
                         <Input
                           value={row.winding}
                           onChange={(e) => updateRow(idx, "winding", e.target.value)}
+                          onKeyDown={handleKeyDown}
                           placeholder="권취"
                           type="number"
                           className="h-9 text-sm rounded-lg mt-1"
@@ -254,6 +274,7 @@ export default function BulkEntryFormDialog({
                         <Input
                           value={row.workType}
                           onChange={(e) => updateRow(idx, "workType", e.target.value)}
+                          onKeyDown={handleKeyDown}
                           placeholder="작업"
                           className="h-9 text-sm rounded-lg mt-1"
                           data-testid={`bulk-field-workType-${idx}`}
@@ -264,6 +285,7 @@ export default function BulkEntryFormDialog({
                         <Input
                           value={row.emboss}
                           onChange={(e) => updateRow(idx, "emboss", e.target.value)}
+                          onKeyDown={handleKeyDown}
                           placeholder="엠보"
                           className="h-9 text-sm rounded-lg mt-1"
                           data-testid={`bulk-field-emboss-${idx}`}
@@ -274,6 +296,7 @@ export default function BulkEntryFormDialog({
                         <Input
                           value={row.size}
                           onChange={(e) => updateRow(idx, "size", e.target.value)}
+                          onKeyDown={handleKeyDown}
                           placeholder="사이즈"
                           type="number"
                           className="h-9 text-sm rounded-lg mt-1"
@@ -285,6 +308,7 @@ export default function BulkEntryFormDialog({
                         <Input
                           value={row.note}
                           onChange={(e) => updateRow(idx, "note", e.target.value)}
+                          onKeyDown={handleKeyDown}
                           placeholder="기타"
                           className="h-9 text-sm rounded-lg mt-1"
                           data-testid={`bulk-field-note-${idx}`}
