@@ -27,7 +27,18 @@ import {
   useBulkCreateDayEntries,
 } from "@/hooks/use-day-entries";
 import { AuthContext } from "@/App";
-import calendarImage from "@/assets/images/calendar-image.jpg";
+import springImage from "@/assets/images/season-spring.png";
+import summerImage from "@/assets/images/season-summer.png";
+import autumnImage from "@/assets/images/season-autumn.png";
+import winterImage from "@/assets/images/season-winter.png";
+
+function getSeasonalImage() {
+  const month = new Date().getMonth() + 1;
+  if (month >= 3 && month <= 5) return { src: springImage, alt: "봄 풍경" };
+  if (month >= 6 && month <= 8) return { src: summerImage, alt: "여름 풍경" };
+  if (month >= 9 && month <= 11) return { src: autumnImage, alt: "가을 풍경" };
+  return { src: winterImage, alt: "겨울 풍경" };
+}
 
 function toYmd(d: Date) {
   return format(d, "yyyy-MM-dd");
@@ -245,8 +256,8 @@ export default function Home() {
                 />
                 <div className="mt-4 overflow-hidden rounded-2xl border border-border/70">
                   <img
-                    src={calendarImage}
-                    alt="한라산 백록담"
+                    src={getSeasonalImage().src}
+                    alt={getSeasonalImage().alt}
                     className="w-full h-auto object-cover"
                   />
                 </div>
