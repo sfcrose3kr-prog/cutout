@@ -19,9 +19,20 @@ export interface BulkEntryRow {
   note: string;
 }
 
+function toShortDate(date: string): string {
+  return date.startsWith("20") ? date.slice(2) : date;
+}
+
+function toFullDate(date: string): string {
+  if (date.length === 8 && !date.startsWith("20")) {
+    return "20" + date;
+  }
+  return date;
+}
+
 function createEmptyRow(date: string): BulkEntryRow {
   return {
-    date,
+    date: toShortDate(date),
     counterparty: "",
     productName: "",
     thickness: "",
@@ -88,7 +99,11 @@ export default function BulkEntryFormDialog({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     if (filledRows.length === 0) return;
-    onSubmit(filledRows);
+    const rowsWithFullDate = filledRows.map((r) => ({
+      ...r,
+      date: toFullDate(r.date),
+    }));
+    onSubmit(rowsWithFullDate);
   };
 
   return (
@@ -115,7 +130,7 @@ export default function BulkEntryFormDialog({
           <div className="mt-4 rounded-2xl border border-border/70 bg-background/40 p-4">
             <div className="text-xs text-muted-foreground">선택 일자</div>
             <div className="mt-1 text-base font-semibold tracking-tight" data-testid="bulk-entry-selected-date">
-              {selectedDate}
+              {toShortDate(selectedDate)}
             </div>
           </div>
 
@@ -162,7 +177,7 @@ export default function BulkEntryFormDialog({
                     <Input
                       value={row.date}
                       onChange={(e) => updateRow(idx, "date", e.target.value)}
-                      placeholder="YYYY-MM-DD"
+                      placeholder="YY-MM-DD"
                       className="h-9 text-xs rounded-lg"
                       data-testid={`bulk-field-date-${idx}`}
                     />
