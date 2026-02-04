@@ -24,16 +24,16 @@ export const AuthContext = React.createContext<{ isAdmin: boolean }>({ isAdmin: 
 
 function App() {
   const [isLoggedIn, setIsLoggedIn] = React.useState(() => {
-    return sessionStorage.getItem("isLoggedIn") === "true";
+    return localStorage.getItem("isLoggedIn") === "true";
   });
 
   const [isAdmin, setIsAdmin] = React.useState(() => {
-    return sessionStorage.getItem("isAdmin") === "true";
+    return localStorage.getItem("isAdmin") === "true";
   });
 
   const handleLogin = (admin: boolean) => {
-    sessionStorage.setItem("isLoggedIn", "true");
-    sessionStorage.setItem("isAdmin", admin ? "true" : "false");
+    localStorage.setItem("isLoggedIn", "true");
+    localStorage.setItem("isAdmin", admin ? "true" : "false");
     setIsLoggedIn(true);
     setIsAdmin(admin);
   };

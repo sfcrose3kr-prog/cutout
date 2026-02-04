@@ -14,23 +14,23 @@ const USERS = [
 
 export function useAuth() {
   const [isLoggedIn, setIsLoggedIn] = React.useState(() => {
-    return sessionStorage.getItem("isLoggedIn") === "true";
+    return localStorage.getItem("isLoggedIn") === "true";
   });
 
   const [isAdmin, setIsAdmin] = React.useState(() => {
-    return sessionStorage.getItem("isAdmin") === "true";
+    return localStorage.getItem("isAdmin") === "true";
   });
 
   const login = (asAdmin: boolean = false) => {
-    sessionStorage.setItem("isLoggedIn", "true");
-    sessionStorage.setItem("isAdmin", asAdmin ? "true" : "false");
+    localStorage.setItem("isLoggedIn", "true");
+    localStorage.setItem("isAdmin", asAdmin ? "true" : "false");
     setIsLoggedIn(true);
     setIsAdmin(asAdmin);
   };
 
   const logout = () => {
-    sessionStorage.removeItem("isLoggedIn");
-    sessionStorage.removeItem("isAdmin");
+    localStorage.removeItem("isLoggedIn");
+    localStorage.removeItem("isAdmin");
     setIsLoggedIn(false);
     setIsAdmin(false);
   };
