@@ -78,7 +78,7 @@ export default function Shell({
 
         <footer className="border-t border-border/60 bg-background/60 backdrop-blur-xl">
           <div className="mx-auto max-w-7xl px-4 py-8 text-sm text-muted-foreground text-center sm:px-6 lg:px-8">
-            <div>2026년에 만들었습니다</div>
+            <div>Made in 2026</div>
           </div>
         </footer>
       </div>
