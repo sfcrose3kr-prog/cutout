@@ -61,11 +61,18 @@ function createKeyHandler(
 
     if ((e.ctrlKey || e.metaKey) && (e.key === '"' || e.key === "'")) {
       e.preventDefault();
-      const aboveIndex = currentIndex - FIELDS_PER_ROW;
-      if (aboveIndex >= 0 && inputs[aboveIndex]) {
-        const aboveValue = inputs[aboveIndex].value;
-        e.currentTarget.value = aboveValue;
-        e.currentTarget.dispatchEvent(new Event("input", { bubbles: true }));
+      const testId = e.currentTarget.getAttribute("data-testid");
+      if (!testId) return;
+      
+      const match = testId.match(/^bulk-field-(\w+)-(\d+)$/);
+      if (!match) return;
+      
+      const field = match[1] as keyof BulkEntryRow;
+      const rowIndex = parseInt(match[2], 10);
+      
+      if (rowIndex > 0 && rows[rowIndex - 1]) {
+        const aboveValue = rows[rowIndex - 1][field];
+        updateRow(rowIndex, field, aboveValue);
       }
       return;
     }
