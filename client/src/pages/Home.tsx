@@ -27,6 +27,7 @@ import {
   useBulkCreateDayEntries,
 } from "@/hooks/use-day-entries";
 import { AuthContext } from "@/App";
+import pvcFilmImage from "@/assets/images/pvc-film.jpg";
 
 function toYmd(d: Date) {
   return format(d, "yyyy-MM-dd");
@@ -241,6 +242,13 @@ export default function Home() {
                   }}
                   className="rounded-2xl border border-border/70 bg-background/40 p-3"
                 />
+                <div className="mt-4 overflow-hidden rounded-2xl border border-border/70">
+                  <img
+                    src={pvcFilmImage}
+                    alt="PVC 필름 생산"
+                    className="w-full h-auto object-cover"
+                  />
+                </div>
               </div>
             )}
 
