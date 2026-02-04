@@ -31,14 +31,14 @@ export default function ImportExcel() {
         </Link>
       }
     >
-      <Seo title="엑셀 가져오기" description="서버에 첨부된 엑셀 파일을 불러와 일자별 입력 데이터로 가져옵니다." />
+      <Seo title="엑셀 가져오기" description="서버에 첨부된 엑셀 파일을 불러와 재단현황 데이터로 가져옵니다." />
 
       <div className="animate-in-up">
         <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
           <div>
             <h1 className="text-3xl sm:text-4xl">엑셀 가져오기</h1>
             <p className="mt-2 max-w-2xl text-sm text-muted-foreground sm:text-base">
-              서버에 있는 엑셀 파일을 읽어 일자별 입력으로 변환합니다. (열 매핑: 일자/거래처/품명/두께/권취/작업/엠보/사이즈/기타)
+              서버에 있는 엑셀 파일을 읽어 재단현황으로 변환합니다. (열 매핑: 일자/거래처/품명/두께/권취/작업/엠보/사이즈/기타)
             </p>
           </div>
           <div className="flex flex-wrap items-center gap-2">
