@@ -143,7 +143,7 @@ export async function registerRoutes(
           errors.push({ row: i + 2, message: "일자 형식이 올바르지 않습니다" });
           continue;
         }
-        if (!counterparty || !productName || thickness === null || winding === null || !workType || !emboss || size === null) {
+        if (!productName || thickness === null || winding === null || !workType || !emboss || size === null) {
           skipped++;
           errors.push({ row: i + 2, message: "필수 값이 비어있습니다" });
           continue;
@@ -197,7 +197,7 @@ export async function registerRoutes(
       const emboss = (r["엠보"] ?? "").toString().trim();
       const size = toNumber(r["사이즈"]);
       const note = r["기타"] === null ? null : (r["기타"] ?? "").toString().trim();
-      if (!date || !counterparty || !productName || thickness === null || winding === null || !workType || !emboss || size === null) {
+      if (!date || !productName || thickness === null || winding === null || !workType || !emboss || size === null) {
         continue;
       }
       toInsert.push({
