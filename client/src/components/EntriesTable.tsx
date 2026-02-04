@@ -47,7 +47,7 @@ export default function EntriesTable({
         </div>
       </div>
 
-      <div className="w-full overflow-auto max-h-[60vh] md:max-h-none">
+      <div className="w-full overflow-x-auto">
         <Table>
           <TableHeader>
             <TableRow className="bg-muted/40">
