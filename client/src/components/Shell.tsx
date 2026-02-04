@@ -1,8 +1,9 @@
-import { PropsWithChildren } from "react";
+import { PropsWithChildren, useContext } from "react";
 import { Link, useLocation } from "wouter";
 import { CalendarDays, FileSpreadsheet, LayoutGrid } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
+import { AuthContext } from "@/App";
 
 function Brand() {
   return (
@@ -34,6 +35,7 @@ export default function Shell({
   rightSlot,
 }: PropsWithChildren<{ rightSlot?: React.ReactNode }>) {
   const [loc] = useLocation();
+  const { isAdmin } = useContext(AuthContext);
 
   return (
     <div className="min-h-screen bg-mesh grain">
@@ -59,35 +61,39 @@ export default function Shell({
                   <LayoutGrid className="h-4 w-4" />
                   홈
                 </Link>
-                <Link
-                  href="/import"
-                  data-testid="nav-import"
-                  className={cn(
-                    "inline-flex items-center gap-2 rounded-xl px-3 py-2 text-sm font-medium",
-                    "transition-all duration-200",
-                    "hover:bg-secondary/70 hover:shadow-soft",
-                    loc === "/import" && "bg-secondary shadow-soft",
-                  )}
-                >
-                  <FileSpreadsheet className="h-4 w-4" />
-                  엑셀 가져오기
-                </Link>
+                {isAdmin && (
+                  <Link
+                    href="/import"
+                    data-testid="nav-import"
+                    className={cn(
+                      "inline-flex items-center gap-2 rounded-xl px-3 py-2 text-sm font-medium",
+                      "transition-all duration-200",
+                      "hover:bg-secondary/70 hover:shadow-soft",
+                      loc === "/import" && "bg-secondary shadow-soft",
+                    )}
+                  >
+                    <FileSpreadsheet className="h-4 w-4" />
+                    엑셀 가져오기
+                  </Link>
+                )}
               </nav>
 
               <div className="flex items-center gap-2">
                 <div className="hidden sm:block">{rightSlot}</div>
-                <div className="md:hidden">
-                  <Link href="/import" className="no-underline">
-                    <Button
-                      variant="secondary"
-                      size="sm"
-                      data-testid="mobile-import"
-                      className="rounded-xl"
-                    >
-                      가져오기
-                    </Button>
-                  </Link>
-                </div>
+                {isAdmin && (
+                  <div className="md:hidden">
+                    <Link href="/import" className="no-underline">
+                      <Button
+                        variant="secondary"
+                        size="sm"
+                        data-testid="mobile-import"
+                        className="rounded-xl"
+                      >
+                        가져오기
+                      </Button>
+                    </Link>
+                  </div>
+                )}
               </div>
             </div>
           </div>
