@@ -22,6 +22,21 @@ const formSchema = api.dayEntries.create.input.extend({
 
 export type DayEntryFormValues = z.infer<typeof formSchema>;
 
+function handleEnterKey(e: React.KeyboardEvent<HTMLInputElement>) {
+  if (e.key === "Enter") {
+    e.preventDefault();
+    const form = e.currentTarget.form;
+    if (!form) return;
+    const inputs = Array.from(form.querySelectorAll("input:not([type=hidden]), textarea"));
+    const currentIndex = inputs.indexOf(e.currentTarget);
+    const nextInput = inputs[currentIndex + 1] as HTMLInputElement | undefined;
+    if (nextInput) {
+      nextInput.focus();
+      nextInput.select?.();
+    }
+  }
+}
+
 function toDefaults(date: string, entry?: DayEntryResponse | null): DayEntryFormValues {
   return {
     date: entry?.date ?? date,
@@ -115,6 +130,7 @@ export default function EntryFormDialog({
                     <FormControl>
                       <Input
                         {...field}
+                        onKeyDown={handleEnterKey}
                         data-testid="field-date"
                         placeholder="2026-02-04"
                         className="h-11 rounded-xl bg-background/70"
@@ -134,6 +150,7 @@ export default function EntryFormDialog({
                     <FormControl>
                       <Input
                         {...field}
+                        onKeyDown={handleEnterKey}
                         data-testid="field-counterparty"
                         placeholder="예: DS데코"
                         className="h-11 rounded-xl bg-background/70"
@@ -153,6 +170,7 @@ export default function EntryFormDialog({
                     <FormControl>
                       <Input
                         {...field}
+                        onKeyDown={handleEnterKey}
                         data-testid="field-productName"
                         placeholder="예: 330-12"
                         className="h-11 rounded-xl bg-background/70"
@@ -172,6 +190,7 @@ export default function EntryFormDialog({
                     <FormControl>
                       <Input
                         {...field}
+                        onKeyDown={handleEnterKey}
                         data-testid="field-thickness"
                         type="number"
                         step="0.01"
@@ -193,6 +212,7 @@ export default function EntryFormDialog({
                     <FormControl>
                       <Input
                         {...field}
+                        onKeyDown={handleEnterKey}
                         data-testid="field-winding"
                         type="number"
                         placeholder="100"
@@ -213,6 +233,7 @@ export default function EntryFormDialog({
                     <FormControl>
                       <Input
                         {...field}
+                        onKeyDown={handleEnterKey}
                         data-testid="field-workType"
                         placeholder="예: PVC"
                         className="h-11 rounded-xl bg-background/70"
@@ -232,6 +253,7 @@ export default function EntryFormDialog({
                     <FormControl>
                       <Input
                         {...field}
+                        onKeyDown={handleEnterKey}
                         data-testid="field-emboss"
                         placeholder="예: 민자"
                         className="h-11 rounded-xl bg-background/70"
@@ -251,6 +273,7 @@ export default function EntryFormDialog({
                     <FormControl>
                       <Input
                         {...field}
+                        onKeyDown={handleEnterKey}
                         data-testid="field-size"
                         type="number"
                         placeholder="18"
