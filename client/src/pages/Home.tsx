@@ -1,7 +1,7 @@
 import * as React from "react";
-import { format } from "date-fns";
+import { format, startOfMonth, endOfMonth } from "date-fns";
 import { ko } from "date-fns/locale";
-import { Calendar as CalendarIcon, Plus, RefreshCw, Search, SlidersHorizontal, ListPlus } from "lucide-react";
+import { Calendar as CalendarIcon, Plus, RefreshCw, Search, ListPlus, ChevronLeft, ChevronRight } from "lucide-react";
 
 import Seo from "@/components/Seo";
 import Shell from "@/components/Shell";
@@ -11,7 +11,6 @@ import EntryFormDialog, { type DayEntryFormValues } from "@/components/EntryForm
 import BulkEntryFormDialog, { type BulkEntryRow } from "@/components/BulkEntryFormDialog";
 import ConfirmDialog from "@/components/ConfirmDialog";
 
-import { Calendar } from "@/components/ui/calendar";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
@@ -31,36 +30,41 @@ function toYmd(d: Date) {
   return format(d, "yyyy-MM-dd");
 }
 
-function prettyKoreanDate(ymd: string) {
-  const [y, m, da] = ymd.split("-").map((v) => Number(v));
-  const d = new Date(y, (m ?? 1) - 1, da ?? 1);
-  return format(d, "PPP (EEE)", { locale: ko });
+function toYm(d: Date) {
+  return format(d, "yyyy-MM");
+}
+
+function prettyKoreanMonth(ym: string) {
+  const [y, m] = ym.split("-").map((v) => Number(v));
+  const d = new Date(y, (m ?? 1) - 1, 1);
+  return format(d, "yyyy년 M월", { locale: ko });
+}
+
+function getMonthRange(ym: string) {
+  const [y, m] = ym.split("-").map((v) => Number(v));
+  const d = new Date(y, (m ?? 1) - 1, 1);
+  return {
+    from: toYmd(startOfMonth(d)),
+    to: toYmd(endOfMonth(d)),
+  };
 }
 
 export default function Home() {
   const { toast } = useToast();
 
-  const [selectedDate, setSelectedDate] = React.useState<string>(toYmd(new Date()));
-  const [rangeFrom, setRangeFrom] = React.useState<string>("");
-  const [rangeTo, setRangeTo] = React.useState<string>("");
+  const [selectedMonth, setSelectedMonth] = React.useState<string>(toYm(new Date()));
   const [counterparty, setCounterparty] = React.useState<string>("");
   const [q, setQ] = React.useState<string>("");
-  const [showAdvanced, setShowAdvanced] = React.useState<boolean>(false);
 
   const filters = React.useMemo(() => {
-    return showAdvanced
-      ? {
-          from: rangeFrom || undefined,
-          to: rangeTo || undefined,
-          counterparty: counterparty || undefined,
-          q: q || undefined,
-        }
-      : {
-          date: selectedDate,
-          counterparty: counterparty || undefined,
-          q: q || undefined,
-        };
-  }, [showAdvanced, selectedDate, rangeFrom, rangeTo, counterparty, q]);
+    const { from, to } = getMonthRange(selectedMonth);
+    return {
+      from,
+      to,
+      counterparty: counterparty || undefined,
+      q: q || undefined,
+    };
+  }, [selectedMonth, counterparty, q]);
 
   const list = useDayEntries(filters);
 
@@ -128,15 +132,6 @@ export default function Home() {
             <Button
               variant="secondary"
               className="rounded-xl"
-              data-testid="toggle-advanced"
-              onClick={() => setShowAdvanced((v) => !v)}
-            >
-              <SlidersHorizontal className="mr-2 h-4 w-4" />
-              {showAdvanced ? "일자 모드" : "기간 검색"}
-            </Button>
-            <Button
-              variant="secondary"
-              className="rounded-xl"
               data-testid="refresh"
               onClick={() => list.refetch()}
               disabled={list.isFetching}
@@ -155,9 +150,9 @@ export default function Home() {
                   <CalendarIcon className="h-4 w-4" />
                 </span>
                 <div>
-                  <div className="text-sm font-semibold tracking-tight">날짜 선택</div>
-                  <div className="text-xs text-muted-foreground" data-testid="selected-date-label">
-                    {prettyKoreanDate(selectedDate)}
+                  <div className="text-sm font-semibold tracking-tight">월 선택</div>
+                  <div className="text-xs text-muted-foreground" data-testid="selected-month-label">
+                    {prettyKoreanMonth(selectedMonth)}
                   </div>
                 </div>
               </div>
@@ -184,16 +179,38 @@ export default function Home() {
 
             <Separator className="my-4 opacity-60" />
 
-            <div data-testid="calendar">
-              <Calendar
-                mode="single"
-                selected={new Date(selectedDate)}
-                onSelect={(d) => {
-                  if (!d) return;
-                  setSelectedDate(toYmd(d));
+            <div data-testid="month-selector" className="flex items-center justify-between gap-3 rounded-2xl border border-border/70 bg-background/40 p-4">
+              <Button
+                variant="ghost"
+                size="icon"
+                className="rounded-xl"
+                data-testid="prev-month"
+                onClick={() => {
+                  const [y, m] = selectedMonth.split("-").map(Number);
+                  const prev = new Date(y, m - 2, 1);
+                  setSelectedMonth(toYm(prev));
                 }}
-                className="rounded-2xl border border-border/70 bg-background/40 p-3"
-              />
+              >
+                <ChevronLeft className="h-5 w-5" />
+              </Button>
+              <div className="text-center">
+                <div className="text-2xl font-bold tracking-tight" data-testid="current-month">
+                  {prettyKoreanMonth(selectedMonth)}
+                </div>
+              </div>
+              <Button
+                variant="ghost"
+                size="icon"
+                className="rounded-xl"
+                data-testid="next-month"
+                onClick={() => {
+                  const [y, m] = selectedMonth.split("-").map(Number);
+                  const next = new Date(y, m, 1);
+                  setSelectedMonth(toYm(next));
+                }}
+              >
+                <ChevronRight className="h-5 w-5" />
+              </Button>
             </div>
 
             <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-3">
@@ -234,31 +251,12 @@ export default function Home() {
                 </div>
               </div>
 
-              {showAdvanced ? (
-                <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2">
-                  <Input
-                    data-testid="filter-from"
-                    value={rangeFrom}
-                    onChange={(e) => setRangeFrom(e.target.value)}
-                    placeholder="from: YYYY-MM-DD"
-                    className="h-11 rounded-xl bg-background/70"
-                  />
-                  <Input
-                    data-testid="filter-to"
-                    value={rangeTo}
-                    onChange={(e) => setRangeTo(e.target.value)}
-                    placeholder="to: YYYY-MM-DD"
-                    className="h-11 rounded-xl bg-background/70"
-                  />
+              <div className="mt-4 rounded-2xl border border-border/70 bg-background/40 p-4">
+                <div className="text-xs text-muted-foreground">현재 조회</div>
+                <div className="mt-1 text-base font-semibold tracking-tight" data-testid="current-mode">
+                  {prettyKoreanMonth(selectedMonth)} 기준
                 </div>
-              ) : (
-                <div className="mt-4 rounded-2xl border border-border/70 bg-background/40 p-4">
-                  <div className="text-xs text-muted-foreground">현재 조회</div>
-                  <div className="mt-1 text-base font-semibold tracking-tight" data-testid="current-mode">
-                    {selectedDate} 기준
-                  </div>
-                </div>
-              )}
+              </div>
 
               <Separator className="my-5 opacity-60" />
 
@@ -310,7 +308,7 @@ export default function Home() {
         mode="create"
         open={createOpen}
         onOpenChange={setCreateOpen}
-        selectedDate={selectedDate}
+        selectedDate={`${selectedMonth}-01`}
         onSubmit={async (values: DayEntryFormValues) => {
           try {
             await createMut.mutateAsync(values);
@@ -334,7 +332,7 @@ export default function Home() {
           setEditOpen(v);
           if (!v) setEditing(null);
         }}
-        selectedDate={selectedDate}
+        selectedDate={`${selectedMonth}-01`}
         entry={editing}
         onSubmit={async (values: DayEntryFormValues) => {
           if (!editing) return;
@@ -390,7 +388,7 @@ export default function Home() {
       <BulkEntryFormDialog
         open={bulkOpen}
         onOpenChange={setBulkOpen}
-        selectedDate={selectedDate}
+        selectedDate={`${selectedMonth}-01`}
         onSubmit={async (rows: BulkEntryRow[]) => {
           try {
             const entries = rows.map((r) => ({
