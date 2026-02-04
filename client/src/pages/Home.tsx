@@ -1,5 +1,5 @@
 import * as React from "react";
-import { format } from "date-fns";
+import { format, startOfMonth, endOfMonth } from "date-fns";
 import { ko } from "date-fns/locale";
 import { Calendar as CalendarIcon, Plus, RefreshCw, Search, SlidersHorizontal, ListPlus } from "lucide-react";
 
@@ -37,30 +37,44 @@ function prettyKoreanDate(ymd: string) {
   return format(d, "PPP (EEE)", { locale: ko });
 }
 
+type ViewMode = "daily" | "monthly" | "range";
+
 export default function Home() {
   const { toast } = useToast();
 
   const [selectedDate, setSelectedDate] = React.useState<string>(toYmd(new Date()));
+  const [selectedMonth, setSelectedMonth] = React.useState<Date>(new Date());
   const [rangeFrom, setRangeFrom] = React.useState<string>("");
   const [rangeTo, setRangeTo] = React.useState<string>("");
   const [counterparty, setCounterparty] = React.useState<string>("");
   const [q, setQ] = React.useState<string>("");
-  const [showAdvanced, setShowAdvanced] = React.useState<boolean>(false);
+  const [viewMode, setViewMode] = React.useState<ViewMode>("daily");
 
   const filters = React.useMemo(() => {
-    return showAdvanced
-      ? {
-          from: rangeFrom || undefined,
-          to: rangeTo || undefined,
-          counterparty: counterparty || undefined,
-          q: q || undefined,
-        }
-      : {
-          date: selectedDate,
-          counterparty: counterparty || undefined,
-          q: q || undefined,
-        };
-  }, [showAdvanced, selectedDate, rangeFrom, rangeTo, counterparty, q]);
+    if (viewMode === "range") {
+      return {
+        from: rangeFrom || undefined,
+        to: rangeTo || undefined,
+        counterparty: counterparty || undefined,
+        q: q || undefined,
+      };
+    }
+    if (viewMode === "monthly") {
+      const monthStart = format(startOfMonth(selectedMonth), "yyyy-MM-dd");
+      const monthEnd = format(endOfMonth(selectedMonth), "yyyy-MM-dd");
+      return {
+        from: monthStart,
+        to: monthEnd,
+        counterparty: counterparty || undefined,
+        q: q || undefined,
+      };
+    }
+    return {
+      date: selectedDate,
+      counterparty: counterparty || undefined,
+      q: q || undefined,
+    };
+  }, [viewMode, selectedDate, selectedMonth, rangeFrom, rangeTo, counterparty, q]);
 
   const list = useDayEntries(filters);
 
@@ -125,15 +139,35 @@ export default function Home() {
           </div>
 
           <div className="flex flex-wrap items-center gap-2">
-            <Button
-              variant="secondary"
-              className="rounded-xl"
-              data-testid="toggle-advanced"
-              onClick={() => setShowAdvanced((v) => !v)}
-            >
-              <SlidersHorizontal className="mr-2 h-4 w-4" />
-              {showAdvanced ? "일자 모드" : "기간 검색"}
-            </Button>
+            <div className="flex rounded-xl border border-border/70 bg-background/60 p-1">
+              <Button
+                variant={viewMode === "daily" ? "default" : "ghost"}
+                size="sm"
+                className="rounded-lg"
+                data-testid="view-daily"
+                onClick={() => setViewMode("daily")}
+              >
+                일별
+              </Button>
+              <Button
+                variant={viewMode === "monthly" ? "default" : "ghost"}
+                size="sm"
+                className="rounded-lg"
+                data-testid="view-monthly"
+                onClick={() => setViewMode("monthly")}
+              >
+                월별
+              </Button>
+              <Button
+                variant={viewMode === "range" ? "default" : "ghost"}
+                size="sm"
+                className="rounded-lg"
+                data-testid="view-range"
+                onClick={() => setViewMode("range")}
+              >
+                기간
+              </Button>
+            </div>
             <Button
               variant="secondary"
               className="rounded-xl"
@@ -155,9 +189,17 @@ export default function Home() {
                   <CalendarIcon className="h-4 w-4" />
                 </span>
                 <div>
-                  <div className="text-sm font-semibold tracking-tight">날짜 선택</div>
+                  <div className="text-sm font-semibold tracking-tight">
+                    {viewMode === "daily" ? "날짜 선택" : viewMode === "monthly" ? "월 선택" : "기간 검색"}
+                  </div>
                   <div className="text-xs text-muted-foreground" data-testid="selected-date-label">
-                    {prettyKoreanDate(selectedDate)}
+                    {viewMode === "daily"
+                      ? prettyKoreanDate(selectedDate)
+                      : viewMode === "monthly"
+                        ? format(selectedMonth, "yyyy년 M월", { locale: ko })
+                        : rangeFrom && rangeTo
+                          ? `${rangeFrom} ~ ${rangeTo}`
+                          : "기간을 선택하세요"}
                   </div>
                 </div>
               </div>
@@ -184,17 +226,84 @@ export default function Home() {
 
             <Separator className="my-4 opacity-60" />
 
-            <div data-testid="calendar">
-              <Calendar
-                mode="single"
-                selected={new Date(selectedDate)}
-                onSelect={(d) => {
-                  if (!d) return;
-                  setSelectedDate(toYmd(d));
-                }}
-                className="rounded-2xl border border-border/70 bg-background/40 p-3"
-              />
-            </div>
+            {viewMode === "daily" && (
+              <div data-testid="calendar">
+                <Calendar
+                  mode="single"
+                  selected={new Date(selectedDate)}
+                  onSelect={(d) => {
+                    if (!d) return;
+                    setSelectedDate(toYmd(d));
+                  }}
+                  className="rounded-2xl border border-border/70 bg-background/40 p-3"
+                />
+              </div>
+            )}
+
+            {viewMode === "monthly" && (
+              <div data-testid="month-selector" className="rounded-2xl border border-border/70 bg-background/40 p-4">
+                <div className="flex items-center justify-between mb-4">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => setSelectedMonth((prev) => new Date(prev.getFullYear(), prev.getMonth() - 1, 1))}
+                    data-testid="prev-month"
+                  >
+                    이전
+                  </Button>
+                  <div className="text-lg font-semibold" data-testid="current-month">
+                    {format(selectedMonth, "yyyy년 M월", { locale: ko })}
+                  </div>
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    onClick={() => setSelectedMonth((prev) => new Date(prev.getFullYear(), prev.getMonth() + 1, 1))}
+                    data-testid="next-month"
+                  >
+                    다음
+                  </Button>
+                </div>
+                <div className="grid grid-cols-4 gap-2">
+                  {Array.from({ length: 12 }, (_, i) => i + 1).map((month) => (
+                    <Button
+                      key={month}
+                      variant={selectedMonth.getMonth() + 1 === month && selectedMonth.getFullYear() === new Date().getFullYear() ? "default" : "outline"}
+                      size="sm"
+                      className="rounded-lg"
+                      onClick={() => setSelectedMonth(new Date(selectedMonth.getFullYear(), month - 1, 1))}
+                      data-testid={`month-${month}`}
+                    >
+                      {month}월
+                    </Button>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {viewMode === "range" && (
+              <div data-testid="range-selector" className="rounded-2xl border border-border/70 bg-background/40 p-4 space-y-3">
+                <div>
+                  <label className="text-xs text-muted-foreground mb-1 block">시작일</label>
+                  <Input
+                    type="date"
+                    value={rangeFrom}
+                    onChange={(e) => setRangeFrom(e.target.value)}
+                    className="rounded-lg"
+                    data-testid="range-from"
+                  />
+                </div>
+                <div>
+                  <label className="text-xs text-muted-foreground mb-1 block">종료일</label>
+                  <Input
+                    type="date"
+                    value={rangeTo}
+                    onChange={(e) => setRangeTo(e.target.value)}
+                    className="rounded-lg"
+                    data-testid="range-to"
+                  />
+                </div>
+              </div>
+            )}
 
             <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-3">
               <StatPill data-testid="stat-count" label="건수" value={items.length} tone="primary" />
@@ -234,31 +343,18 @@ export default function Home() {
                 </div>
               </div>
 
-              {showAdvanced ? (
-                <div className="mt-4 grid grid-cols-1 gap-3 sm:grid-cols-2">
-                  <Input
-                    data-testid="filter-from"
-                    value={rangeFrom}
-                    onChange={(e) => setRangeFrom(e.target.value)}
-                    placeholder="from: YYYY-MM-DD"
-                    className="h-11 rounded-xl bg-background/70"
-                  />
-                  <Input
-                    data-testid="filter-to"
-                    value={rangeTo}
-                    onChange={(e) => setRangeTo(e.target.value)}
-                    placeholder="to: YYYY-MM-DD"
-                    className="h-11 rounded-xl bg-background/70"
-                  />
+              <div className="mt-4 rounded-2xl border border-border/70 bg-background/40 p-4">
+                <div className="text-xs text-muted-foreground">현재 조회</div>
+                <div className="mt-1 text-base font-semibold tracking-tight" data-testid="current-mode">
+                  {viewMode === "daily"
+                    ? `${selectedDate} (일별)`
+                    : viewMode === "monthly"
+                      ? `${format(selectedMonth, "yyyy년 M월", { locale: ko })} (월별)`
+                      : rangeFrom && rangeTo
+                        ? `${rangeFrom} ~ ${rangeTo} (기간)`
+                        : "기간을 선택하세요"}
                 </div>
-              ) : (
-                <div className="mt-4 rounded-2xl border border-border/70 bg-background/40 p-4">
-                  <div className="text-xs text-muted-foreground">현재 조회</div>
-                  <div className="mt-1 text-base font-semibold tracking-tight" data-testid="current-mode">
-                    {selectedDate} 기준
-                  </div>
-                </div>
-              )}
+              </div>
 
               <Separator className="my-5 opacity-60" />
 
