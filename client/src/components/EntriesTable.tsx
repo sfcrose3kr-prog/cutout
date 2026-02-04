@@ -51,15 +51,15 @@ export default function EntriesTable({
         <Table>
           <TableHeader>
             <TableRow className="bg-muted/40">
-              <TableHead className="min-w-[100px]">일자</TableHead>
-              <TableHead className="min-w-[110px]">거래처</TableHead>
-              <TableHead className="min-w-[120px]">품명</TableHead>
-              <TableHead className="min-w-[80px] text-right">두께</TableHead>
-              <TableHead className="min-w-[80px] text-right">권취</TableHead>
-              <TableHead className="min-w-[90px]">작업</TableHead>
-              <TableHead className="min-w-[90px]">엠보</TableHead>
-              <TableHead className="min-w-[80px] text-right">사이즈</TableHead>
-              <TableHead className="min-w-[180px]">기타</TableHead>
+              <TableHead className="min-w-[70px]">일자</TableHead>
+              <TableHead className="min-w-[90px]">거래처</TableHead>
+              <TableHead className="min-w-[100px]">품명</TableHead>
+              <TableHead className="w-[50px] text-right">두께</TableHead>
+              <TableHead className="w-[50px] text-right">권취</TableHead>
+              <TableHead className="w-[45px]">작업</TableHead>
+              <TableHead className="w-[45px]">엠보</TableHead>
+              <TableHead className="w-[55px] text-right">사이즈</TableHead>
+              <TableHead className="min-w-[150px]">기타</TableHead>
               <TableHead className="w-[120px] text-right">작업</TableHead>
             </TableRow>
           </TableHeader>
