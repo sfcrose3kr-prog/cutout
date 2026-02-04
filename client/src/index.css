@@ -294,4 +294,25 @@
   input[type="search"]::-webkit-search-cancel-button {
     @apply hidden;
   }
+
+  /* Sparkle text animation */
+  @keyframes sparkle {
+    0%, 100% {
+      background-position: 0% 50%;
+      text-shadow: 0 0 10px rgba(255, 215, 0, 0.8), 0 0 20px rgba(255, 215, 0, 0.6), 0 0 30px rgba(255, 215, 0, 0.4);
+    }
+    50% {
+      background-position: 100% 50%;
+      text-shadow: 0 0 20px rgba(255, 215, 0, 1), 0 0 40px rgba(255, 215, 0, 0.8), 0 0 60px rgba(255, 215, 0, 0.6);
+    }
+  }
+
+  .sparkle-text {
+    background: linear-gradient(90deg, #ffd700, #fff, #ffd700, #fff, #ffd700);
+    background-size: 200% auto;
+    background-clip: text;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: sparkle 2s ease-in-out infinite;
+  }
 }
