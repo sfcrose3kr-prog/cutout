@@ -152,105 +152,122 @@ export default function BulkEntryFormDialog({
             </div>
 
             <ScrollArea className="flex-1 pr-2">
-              <div className="space-y-2">
-                <div className="grid grid-cols-[40px_70px_90px_90px_60px_60px_70px_60px_60px_1fr_40px] gap-1 text-xs font-medium text-muted-foreground sticky top-0 bg-card/95 py-1 z-10">
-                  <div>#</div>
-                  <div>일자</div>
-                  <div>거래처</div>
-                  <div>품명</div>
-                  <div>두께</div>
-                  <div>권취</div>
-                  <div>작업</div>
-                  <div>엠보</div>
-                  <div>사이즈</div>
-                  <div>기타</div>
-                  <div></div>
-                </div>
-
+              <div className="space-y-3">
                 {rows.map((row, idx) => (
                   <div
                     key={idx}
-                    className="grid grid-cols-[40px_70px_90px_90px_60px_60px_70px_60px_60px_1fr_40px] gap-1 items-center"
+                    className="rounded-xl border border-border/70 bg-background/40 p-3"
                     data-testid={`bulk-row-${idx}`}
                   >
-                    <div className="text-xs text-muted-foreground text-center">{idx + 1}</div>
-                    <Input
-                      value={row.date}
-                      onChange={(e) => updateRow(idx, "date", e.target.value)}
-                      placeholder="YY-MM-DD"
-                      className="h-9 text-xs rounded-lg"
-                      data-testid={`bulk-field-date-${idx}`}
-                    />
-                    <Input
-                      value={row.counterparty}
-                      onChange={(e) => updateRow(idx, "counterparty", e.target.value)}
-                      placeholder="거래처"
-                      className="h-9 text-xs rounded-lg"
-                      data-testid={`bulk-field-counterparty-${idx}`}
-                    />
-                    <Input
-                      value={row.productName}
-                      onChange={(e) => updateRow(idx, "productName", e.target.value)}
-                      placeholder="품명"
-                      className="h-9 text-xs rounded-lg"
-                      data-testid={`bulk-field-productName-${idx}`}
-                    />
-                    <Input
-                      value={row.thickness}
-                      onChange={(e) => updateRow(idx, "thickness", e.target.value)}
-                      placeholder="두께"
-                      type="number"
-                      step="0.01"
-                      className="h-9 text-xs rounded-lg"
-                      data-testid={`bulk-field-thickness-${idx}`}
-                    />
-                    <Input
-                      value={row.winding}
-                      onChange={(e) => updateRow(idx, "winding", e.target.value)}
-                      placeholder="권취"
-                      type="number"
-                      className="h-9 text-xs rounded-lg"
-                      data-testid={`bulk-field-winding-${idx}`}
-                    />
-                    <Input
-                      value={row.workType}
-                      onChange={(e) => updateRow(idx, "workType", e.target.value)}
-                      placeholder="작업"
-                      className="h-9 text-xs rounded-lg"
-                      data-testid={`bulk-field-workType-${idx}`}
-                    />
-                    <Input
-                      value={row.emboss}
-                      onChange={(e) => updateRow(idx, "emboss", e.target.value)}
-                      placeholder="엠보"
-                      className="h-9 text-xs rounded-lg"
-                      data-testid={`bulk-field-emboss-${idx}`}
-                    />
-                    <Input
-                      value={row.size}
-                      onChange={(e) => updateRow(idx, "size", e.target.value)}
-                      placeholder="사이즈"
-                      type="number"
-                      className="h-9 text-xs rounded-lg"
-                      data-testid={`bulk-field-size-${idx}`}
-                    />
-                    <Input
-                      value={row.note}
-                      onChange={(e) => updateRow(idx, "note", e.target.value)}
-                      placeholder="기타"
-                      className="h-9 text-xs rounded-lg"
-                      data-testid={`bulk-field-note-${idx}`}
-                    />
-                    <Button
-                      type="button"
-                      variant="ghost"
-                      size="icon"
-                      className="h-9 w-9 text-muted-foreground hover:text-destructive"
-                      onClick={() => removeRow(idx)}
-                      data-testid={`bulk-remove-row-${idx}`}
-                    >
-                      <Trash2 className="h-4 w-4" />
-                    </Button>
+                    <div className="flex items-center justify-between mb-2">
+                      <div className="text-sm font-medium text-foreground">#{idx + 1}</div>
+                      <Button
+                        type="button"
+                        variant="ghost"
+                        size="icon"
+                        className="h-8 w-8 text-muted-foreground hover:text-destructive"
+                        onClick={() => removeRow(idx)}
+                        data-testid={`bulk-remove-row-${idx}`}
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </Button>
+                    </div>
+                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-2">
+                      <div>
+                        <label className="text-xs text-muted-foreground">일자</label>
+                        <Input
+                          value={row.date}
+                          onChange={(e) => updateRow(idx, "date", e.target.value)}
+                          placeholder="YY-MM-DD"
+                          className="h-9 text-sm rounded-lg mt-1"
+                          data-testid={`bulk-field-date-${idx}`}
+                        />
+                      </div>
+                      <div>
+                        <label className="text-xs text-muted-foreground">거래처</label>
+                        <Input
+                          value={row.counterparty}
+                          onChange={(e) => updateRow(idx, "counterparty", e.target.value)}
+                          placeholder="거래처"
+                          className="h-9 text-sm rounded-lg mt-1"
+                          data-testid={`bulk-field-counterparty-${idx}`}
+                        />
+                      </div>
+                      <div>
+                        <label className="text-xs text-muted-foreground">품명</label>
+                        <Input
+                          value={row.productName}
+                          onChange={(e) => updateRow(idx, "productName", e.target.value)}
+                          placeholder="품명"
+                          className="h-9 text-sm rounded-lg mt-1"
+                          data-testid={`bulk-field-productName-${idx}`}
+                        />
+                      </div>
+                      <div>
+                        <label className="text-xs text-muted-foreground">두께</label>
+                        <Input
+                          value={row.thickness}
+                          onChange={(e) => updateRow(idx, "thickness", e.target.value)}
+                          placeholder="두께"
+                          type="number"
+                          step="0.01"
+                          className="h-9 text-sm rounded-lg mt-1"
+                          data-testid={`bulk-field-thickness-${idx}`}
+                        />
+                      </div>
+                      <div>
+                        <label className="text-xs text-muted-foreground">권취</label>
+                        <Input
+                          value={row.winding}
+                          onChange={(e) => updateRow(idx, "winding", e.target.value)}
+                          placeholder="권취"
+                          type="number"
+                          className="h-9 text-sm rounded-lg mt-1"
+                          data-testid={`bulk-field-winding-${idx}`}
+                        />
+                      </div>
+                      <div>
+                        <label className="text-xs text-muted-foreground">작업</label>
+                        <Input
+                          value={row.workType}
+                          onChange={(e) => updateRow(idx, "workType", e.target.value)}
+                          placeholder="작업"
+                          className="h-9 text-sm rounded-lg mt-1"
+                          data-testid={`bulk-field-workType-${idx}`}
+                        />
+                      </div>
+                      <div>
+                        <label className="text-xs text-muted-foreground">엠보</label>
+                        <Input
+                          value={row.emboss}
+                          onChange={(e) => updateRow(idx, "emboss", e.target.value)}
+                          placeholder="엠보"
+                          className="h-9 text-sm rounded-lg mt-1"
+                          data-testid={`bulk-field-emboss-${idx}`}
+                        />
+                      </div>
+                      <div>
+                        <label className="text-xs text-muted-foreground">사이즈</label>
+                        <Input
+                          value={row.size}
+                          onChange={(e) => updateRow(idx, "size", e.target.value)}
+                          placeholder="사이즈"
+                          type="number"
+                          className="h-9 text-sm rounded-lg mt-1"
+                          data-testid={`bulk-field-size-${idx}`}
+                        />
+                      </div>
+                      <div>
+                        <label className="text-xs text-muted-foreground">기타</label>
+                        <Input
+                          value={row.note}
+                          onChange={(e) => updateRow(idx, "note", e.target.value)}
+                          placeholder="기타"
+                          className="h-9 text-sm rounded-lg mt-1"
+                          data-testid={`bulk-field-note-${idx}`}
+                        />
+                      </div>
+                    </div>
                   </div>
                 ))}
               </div>
