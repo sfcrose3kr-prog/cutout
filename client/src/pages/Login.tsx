@@ -7,8 +7,10 @@ import { Input } from "@/components/ui/input";
 import { Card } from "@/components/ui/card";
 import { useToast } from "@/hooks/use-toast";
 
-const VALID_USERNAME = "ADMIN";
-const VALID_PASSWORD = "8469";
+const USERS = [
+  { username: "ADMIN", password: "8469", isAdmin: true },
+  { username: "세호", password: "2347", isAdmin: false },
+];
 
 export function useAuth() {
   const [isLoggedIn, setIsLoggedIn] = React.useState(() => {
@@ -44,8 +46,9 @@ export default function Login({ onLogin }: { onLogin: (isAdmin: boolean) => void
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     
-    if (username === VALID_USERNAME && password === VALID_PASSWORD) {
-      onLogin(true);
+    const user = USERS.find(u => u.username === username && u.password === password);
+    if (user) {
+      onLogin(user.isAdmin);
     } else {
       toast({
         title: "로그인 실패",
