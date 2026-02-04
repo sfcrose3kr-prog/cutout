@@ -1,6 +1,6 @@
 import { PropsWithChildren, useContext } from "react";
 import { Link, useLocation } from "wouter";
-import { CalendarDays, FileSpreadsheet, LayoutGrid } from "lucide-react";
+import { CalendarDays, FileSpreadsheet, LayoutGrid, LogOut } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { AuthContext } from "@/App";
@@ -35,7 +35,7 @@ export default function Shell({
   rightSlot,
 }: PropsWithChildren<{ rightSlot?: React.ReactNode }>) {
   const [loc] = useLocation();
-  const { isAdmin } = useContext(AuthContext);
+  const { isAdmin, logout } = useContext(AuthContext);
 
   return (
     <div className="min-h-screen bg-mesh grain">
@@ -94,6 +94,16 @@ export default function Shell({
                     </Link>
                   </div>
                 )}
+                <Button
+                  variant="ghost"
+                  size="icon"
+                  onClick={logout}
+                  data-testid="logout-button"
+                  className="rounded-xl"
+                  title="로그아웃"
+                >
+                  <LogOut className="h-4 w-4" />
+                </Button>
               </div>
             </div>
           </div>

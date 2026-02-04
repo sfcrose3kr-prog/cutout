@@ -40,7 +40,9 @@ export function useAuth() {
 
 export default function Login({ onLogin }: { onLogin: (isAdmin: boolean) => void }) {
   const { toast } = useToast();
-  const [username, setUsername] = React.useState("");
+  const [username, setUsername] = React.useState(() => {
+    return localStorage.getItem("lastUsername") || "";
+  });
   const [password, setPassword] = React.useState("");
 
   const handleSubmit = (e: React.FormEvent) => {
@@ -48,6 +50,7 @@ export default function Login({ onLogin }: { onLogin: (isAdmin: boolean) => void
     
     const user = USERS.find(u => u.username === username && u.password === password);
     if (user) {
+      localStorage.setItem("lastUsername", username);
       onLogin(user.isAdmin);
     } else {
       toast({
