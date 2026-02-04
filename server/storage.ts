@@ -65,7 +65,7 @@ export class DatabaseStorage implements IStorage {
       .select()
       .from(dayEntries)
       .where(where.length ? and(...where) : undefined)
-      .orderBy(desc(dayEntries.date), asc(dayEntries.id));
+      .orderBy(desc(dayEntries.date), desc(dayEntries.id));
 
     return await query;
   }
