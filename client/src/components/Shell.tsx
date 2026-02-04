@@ -1,6 +1,6 @@
 import { PropsWithChildren, useContext } from "react";
 import { Link, useLocation } from "wouter";
-import { CalendarDays, FileSpreadsheet, LayoutGrid, LogOut } from "lucide-react";
+import { CalendarDays, LayoutGrid, LogOut } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Button } from "@/components/ui/button";
 import { AuthContext } from "@/App";
@@ -61,39 +61,10 @@ export default function Shell({
                   <LayoutGrid className="h-4 w-4" />
                   홈
                 </Link>
-                {isAdmin && (
-                  <Link
-                    href="/import"
-                    data-testid="nav-import"
-                    className={cn(
-                      "inline-flex items-center gap-2 rounded-xl px-3 py-2 text-sm font-medium",
-                      "transition-all duration-200",
-                      "hover:bg-secondary/70 hover:shadow-soft",
-                      loc === "/import" && "bg-secondary shadow-soft",
-                    )}
-                  >
-                    <FileSpreadsheet className="h-4 w-4" />
-                    엑셀 가져오기
-                  </Link>
-                )}
               </nav>
 
               <div className="flex items-center gap-2">
                 <div className="hidden sm:block">{rightSlot}</div>
-                {isAdmin && (
-                  <div className="md:hidden">
-                    <Link href="/import" className="no-underline">
-                      <Button
-                        variant="secondary"
-                        size="sm"
-                        data-testid="mobile-import"
-                        className="rounded-xl"
-                      >
-                        가져오기
-                      </Button>
-                    </Link>
-                  </div>
-                )}
                 <Button
                   variant="ghost"
                   size="icon"
