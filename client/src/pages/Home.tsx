@@ -133,8 +133,8 @@ export default function Home() {
         <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
           <div>
             <h1 className="text-3xl sm:text-4xl">재단1호기 재단현황</h1>
-            <p className="mt-2 max-w-2xl text-lg sm:text-xl font-semibold sparkle-text">
-              "오늘 <span className="text-red-500">모</span> 먹지?"
+            <p className="mt-2 max-w-2xl text-lg sm:text-xl font-semibold">
+              <span className="sparkle-text">"오늘 </span><span className="text-red-500 animate-pulse">모</span><span className="sparkle-text"> 먹지?"</span>
             </p>
           </div>
 
