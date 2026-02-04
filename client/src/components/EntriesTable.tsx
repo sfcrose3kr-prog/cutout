@@ -60,7 +60,7 @@ export default function EntriesTable({
               <TableHead className="min-w-[90px]">엠보</TableHead>
               <TableHead className="min-w-[80px] text-right">사이즈</TableHead>
               <TableHead className="min-w-[180px]">기타</TableHead>
-              <TableHead className="w-[120px] text-right">작업</TableHead>
+              <TableHead className="w-[90px] text-right sticky right-0 bg-muted/40">작업</TableHead>
             </TableRow>
           </TableHeader>
 
@@ -84,28 +84,26 @@ export default function EntriesTable({
                 <TableCell className="text-muted-foreground">
                   {it.note || <span className="opacity-50">—</span>}
                 </TableCell>
-                <TableCell className="text-right">
-                  <div className="inline-flex items-center justify-end gap-2">
+                <TableCell className="text-right sticky right-0 bg-card/95 backdrop-blur-sm">
+                  <div className="inline-flex items-center justify-end gap-1">
                     <Button
                       variant="secondary"
-                      size="sm"
-                      className="h-9 rounded-xl"
+                      size="icon"
+                      className="h-8 w-8 rounded-lg"
                       data-testid={`entry-edit-${it.id}`}
                       onClick={() => onEdit(it)}
                     >
-                      <Pencil className="mr-2 h-4 w-4" />
-                      수정
+                      <Pencil className="h-4 w-4" />
                     </Button>
                     <Button
                       variant="destructive"
-                      size="sm"
-                      className="h-9 rounded-xl"
+                      size="icon"
+                      className="h-8 w-8 rounded-lg"
                       data-testid={`entry-delete-${it.id}`}
                       onClick={() => onDelete(it)}
                       disabled={isDeletingId === it.id}
                     >
-                      <Trash2 className="mr-2 h-4 w-4" />
-                      {isDeletingId === it.id ? "삭제 중..." : "삭제"}
+                      <Trash2 className="h-4 w-4" />
                     </Button>
                   </div>
                 </TableCell>
