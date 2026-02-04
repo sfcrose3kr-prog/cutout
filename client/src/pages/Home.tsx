@@ -48,7 +48,7 @@ export default function Home() {
   const [rangeTo, setRangeTo] = React.useState<string>("");
   const [counterparty, setCounterparty] = React.useState<string>("");
   const [q, setQ] = React.useState<string>("");
-  const [viewMode, setViewMode] = React.useState<ViewMode>("daily");
+  const [viewMode, setViewMode] = React.useState<ViewMode>("monthly");
 
   const filters = React.useMemo(() => {
     if (viewMode === "range") {
