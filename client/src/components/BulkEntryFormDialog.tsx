@@ -61,10 +61,12 @@ export default function BulkEntryFormDialog({
   onSubmit: (rows: BulkEntryRow[]) => void;
   isPending?: boolean;
 }) {
+  const [baseDate, setBaseDate] = React.useState<string>(toShortDate(selectedDate));
   const [rows, setRows] = React.useState<BulkEntryRow[]>(() => createEmptyRows(selectedDate, 10));
 
   React.useEffect(() => {
     if (open) {
+      setBaseDate(toShortDate(selectedDate));
       setRows(createEmptyRows(selectedDate, 10));
     }
   }, [open, selectedDate]);
@@ -78,7 +80,11 @@ export default function BulkEntryFormDialog({
   };
 
   const addRows = (count: number) => {
-    setRows((prev) => [...prev, ...createEmptyRows(selectedDate, count)]);
+    setRows((prev) => [...prev, ...createEmptyRows(baseDate, count)]);
+  };
+
+  const applyDateToAll = () => {
+    setRows((prev) => prev.map((r) => ({ ...r, date: baseDate })));
   };
 
   const removeRow = (index: number) => {
@@ -128,9 +134,26 @@ export default function BulkEntryFormDialog({
           </DialogHeader>
 
           <div className="mt-4 rounded-2xl border border-border/70 bg-background/40 p-4">
-            <div className="text-xs text-muted-foreground">선택 일자</div>
-            <div className="mt-1 text-base font-semibold tracking-tight" data-testid="bulk-entry-selected-date">
-              {toShortDate(selectedDate)}
+            <div className="flex items-center justify-between gap-3">
+              <div className="flex-1">
+                <label className="text-xs text-muted-foreground">기준 일자 (YY-MM-DD)</label>
+                <Input
+                  value={baseDate}
+                  onChange={(e) => setBaseDate(e.target.value)}
+                  placeholder="YY-MM-DD"
+                  className="h-10 text-base font-semibold rounded-lg mt-1"
+                  data-testid="bulk-entry-base-date"
+                />
+              </div>
+              <Button
+                type="button"
+                variant="secondary"
+                className="rounded-xl mt-5"
+                onClick={applyDateToAll}
+                data-testid="apply-date-to-all"
+              >
+                전체 적용
+              </Button>
             </div>
           </div>
 
