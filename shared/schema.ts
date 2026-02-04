@@ -11,7 +11,7 @@ export const dayEntries = pgTable("day_entries", {
   winding: integer("winding").notNull(), // 권취
   workType: text("work_type").notNull(), // 작업
   emboss: text("emboss").notNull(), // 엠보
-  size: integer("size").notNull(), // 사이즈
+  size: text("size").notNull(), // 사이즈
   note: text("note"), // 기타
 });
 

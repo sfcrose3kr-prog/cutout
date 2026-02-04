@@ -80,7 +80,7 @@ export default function EntriesTable({
                 <TableCell className="text-right tabular-nums">{it.winding}</TableCell>
                 <TableCell>{it.workType}</TableCell>
                 <TableCell>{it.emboss}</TableCell>
-                <TableCell className="text-right tabular-nums">{it.size}</TableCell>
+                <TableCell className="text-right">{it.size}</TableCell>
                 <TableCell className="text-muted-foreground">
                   {it.note || <span className="opacity-50">—</span>}
                 </TableCell>

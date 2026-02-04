@@ -497,7 +497,7 @@ export default function Home() {
               winding: parseInt(r.winding, 10),
               workType: r.workType,
               emboss: r.emboss,
-              size: parseInt(r.size, 10),
+              size: r.size,
               note: r.note || null,
             }));
             const result = await bulkCreateMut.mutateAsync(entries);

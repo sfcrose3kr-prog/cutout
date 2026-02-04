@@ -17,7 +17,6 @@ import { cn } from "@/lib/utils";
 const formSchema = api.dayEntries.create.input.extend({
   thickness: z.coerce.number(),
   winding: z.coerce.number().int(),
-  size: z.coerce.number().int(),
 });
 
 export type DayEntryFormValues = z.infer<typeof formSchema>;
@@ -46,7 +45,7 @@ function toDefaults(date: string, entry?: DayEntryResponse | null): DayEntryForm
     winding: (entry?.winding ?? 0) as any,
     workType: entry?.workType ?? "PVC",
     emboss: entry?.emboss ?? "민자",
-    size: (entry?.size ?? 18) as any,
+    size: entry?.size ?? "18",
     note: entry?.note ?? "",
   };
 }
@@ -275,7 +274,6 @@ export default function EntryFormDialog({
                         {...field}
                         onKeyDown={handleEnterKey}
                         data-testid="field-size"
-                        type="number"
                         placeholder="18"
                         className="h-11 rounded-xl bg-background/70"
                       />

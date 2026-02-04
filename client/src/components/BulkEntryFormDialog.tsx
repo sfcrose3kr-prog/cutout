@@ -238,7 +238,6 @@ export default function BulkEntryFormDialog({
                       onChange={(e) => updateRow(idx, "size", e.target.value)}
                       onKeyDown={handleEnterKey}
                       placeholder="사이즈"
-                      type="number"
                       className="h-9 text-xs rounded-lg"
                       data-testid={`bulk-field-size-${idx}`}
                     />
