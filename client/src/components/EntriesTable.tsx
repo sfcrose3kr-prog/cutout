@@ -71,7 +71,7 @@ export default function EntriesTable({
                 data-testid={`entry-row-${it.id}`}
                 className="transition-colors hover:bg-secondary/50"
               >
-                <TableCell className="tabular-nums">{it.date}</TableCell>
+                <TableCell className="tabular-nums">{it.date.slice(2)}</TableCell>
                 <TableCell className="font-medium">{it.counterparty}</TableCell>
                 <TableCell>{it.productName}</TableCell>
                 <TableCell className="text-right tabular-nums">
