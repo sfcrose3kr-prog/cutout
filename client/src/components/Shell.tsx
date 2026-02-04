@@ -13,8 +13,8 @@ function Brand() {
           "grid h-10 w-10 place-items-center rounded-2xl",
           "bg-gradient-to-br from-primary/15 to-accent/15",
           "border border-border shadow-soft",
+          "hover:shadow-md hover:scale-105 transition-all duration-200",
         )}
-        aria-hidden
       >
         <CalendarDays className="h-5 w-5 text-primary" />
       </div>
@@ -35,7 +35,7 @@ export default function Shell({
         <header className="sticky top-0 z-40 border-b border-border/70 bg-background/70 backdrop-blur-xl">
           <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
             <div className="flex h-16 items-center justify-between gap-4">
-              <Link href="/" className="group flex items-center gap-3">
+              <Link href="/" className="group flex items-center gap-3 cursor-pointer" data-testid="brand-home-link">
                 <Brand />
               </Link>
 
