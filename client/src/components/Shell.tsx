@@ -85,14 +85,8 @@ export default function Shell({
         </main>
 
         <footer className="border-t border-border/60 bg-background/60 backdrop-blur-xl">
-          <div className="mx-auto flex max-w-7xl flex-col gap-2 px-4 py-8 text-sm text-muted-foreground sm:flex-row sm:items-center sm:justify-between sm:px-6 lg:px-8">
+          <div className="mx-auto max-w-7xl px-4 py-8 text-sm text-muted-foreground text-center sm:px-6 lg:px-8">
             <div>2026년에 만들었습니다</div>
-            <div className="flex flex-wrap items-center gap-3">
-              <span className="inline-flex items-center gap-2">
-                <span className="h-2 w-2 rounded-full bg-primary/70" />
-                빠른 입력 · 즉시 검색 · 날짜 중심
-              </span>
-            </div>
           </div>
         </footer>
       </div>
