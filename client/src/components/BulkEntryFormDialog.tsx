@@ -143,10 +143,10 @@ export default function BulkEntryFormDialog({
           "max-w-5xl rounded-3xl border-border/70 p-0",
           "bg-gradient-to-br from-card/92 to-card/80 backdrop-blur-xl",
           "shadow-[var(--shadow-xl)]",
-          "max-h-[90vh]"
+          "max-h-[85vh] overflow-hidden"
         )}
       >
-        <div className="p-6 sm:p-7 flex flex-col max-h-[90vh]">
+        <div className="p-6 sm:p-7 flex flex-col max-h-[85vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle className="flex items-center gap-2 text-2xl">
               <span className="inline-flex h-8 w-8 items-center justify-center rounded-2xl bg-primary/10 text-primary">
