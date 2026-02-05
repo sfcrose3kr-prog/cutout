@@ -141,12 +141,12 @@ export default function Home() {
 
   return (
     <Shell rightSlot={headerRight}>
-      <Seo title="재단1호기 재단현황" description="캘린더로 날짜를 선택하고 거래처/품명 등 작업 정보를 일자별로 빠르게 입력·조회하세요." />
+      <Seo title="재단1호기 재단일보" description="캘린더로 날짜를 선택하고 거래처/품명 등 작업 정보를 일자별로 빠르게 입력·조회하세요." />
 
       <div className="animate-in-up">
         <div className="flex flex-col gap-3 md:flex-row md:items-end md:justify-between">
           <div>
-            <h1 className="text-3xl sm:text-4xl">재단1호기 재단현황</h1>
+            <h1 className="text-3xl sm:text-4xl">재단1호기 재단일보</h1>
             <p className="mt-2 max-w-2xl text-lg sm:text-xl font-semibold">
               <span className="sparkle-text">"오늘 </span><span className="text-red-500 animate-pulse">모</span><span className="sparkle-text"> 먹지?"</span>
             </p>

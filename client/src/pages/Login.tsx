@@ -68,7 +68,7 @@ export default function Login({ onLogin }: { onLogin: (isAdmin: boolean) => void
           <div className="mx-auto w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center">
             <Lock className="w-8 h-8 text-primary" />
           </div>
-          <h1 className="text-2xl font-bold">재단1호기 재단현황</h1>
+          <h1 className="text-2xl font-bold">재단1호기 재단일보</h1>
           <p className="text-muted-foreground">로그인이 필요합니다</p>
         </div>
 
